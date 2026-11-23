@@ -401,3 +401,7 @@ dialog.rev-sheet{width:min(560px,100% - 24px)}
 .rev-thanks{padding:30px 26px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
 .rev-thanks p{margin:0;color:var(--muted)}
 @media (max-width:560px){.rev-form{grid-template-columns:1fr;padding:22px 18px}}
+.rev-name-row{display:flex;gap:8px}
+.rev-name-row select{flex:none;width:auto;font:inherit;font-size:1rem;padding:.75rem .6rem;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+.rev-name-row select:focus{outline:none;border-color:var(--orange)}
+.rev-name-row input{flex:1;min-width:0}

@@ -164,7 +164,7 @@ Deliver to: ${v("b-where") || "-"}`);
   const track = document.getElementById("rev-track");
   const empty = document.getElementById("rev-empty");
   const esc = t => String(t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const initials = n => n.trim().split(/\s+/).slice(0,2).map(w => w[0]).join("").toUpperCase();
+  const initials = n => n.replace(/^(mr|mrs)\.?\s+/i,"").trim().split(/\s+/).slice(0,2).map(w => w[0]).join("").toUpperCase();
   const card = (r, hidden) => {
     const n = Math.max(1, Math.min(5, Number(r.rating) || 5));
     const stars = "★".repeat(n) + `<span class="off">${"★".repeat(5-n)}</span>`;
@@ -173,7 +173,7 @@ Deliver to: ${v("b-where") || "-"}`);
       <div class="stars" aria-label="${n} out of 5 stars">${stars}</div>
       <blockquote>“${esc(r.text)}”</blockquote>
       <div class="who"><span class="av">${av}</span>
-        <div><b>${esc(r.name)}</b><span>${esc(r.city || "")}${r.date ? " · " + esc(r.date) : ""}</span></div>
+        <div><b>${esc(r.title ? r.title + " " + r.name : r.name)}</b><span>${esc(r.city || "")}${r.date ? " · " + esc(r.date) : ""}</span></div>
         ${r.service ? `<span class="svc">${esc(r.service)}</span>` : ""}
       </div></li>`;
   };
@@ -212,11 +212,11 @@ Deliver to: ${v("b-where") || "-"}`);
     const rating = form.querySelector('input[name="rating"]:checked').value;
     openWA(`Hello AEFO, here is my review for your website.
 Rating: ${"★".repeat(rating)} (${rating}/5)
-Name: ${v("rv-name")}
+Name: ${v("rv-title")} ${v("rv-name")}
 Delivered to: ${v("rv-city")}
 Service: ${v("rv-service")}
 Review: ${v("rv-text")}
-I agree AEFO can show my first name, city and review on the website.`);
+I agree AEFO can show my name, city and review on the website.`);
     form.hidden = true; thanks.hidden = false;
   });
 })();
