@@ -385,6 +385,69 @@
   </dialog>
 </main>
 
+<!-- ---------- CUSTOMER REVIEWS (shown on Ship and Pre-order) ---------- -->
+<section class="block reviews-band" id="reviews" aria-labelledby="rev-title">
+  <div class="wrap">
+    <div class="rev-head">
+      <div>
+        <h2 id="rev-title">What customers are saying</h2>
+        <p class="lede">Feedback from people who shipped or pre-ordered with AEFO.</p>
+      </div>
+      <button class="btn btn-orange" type="button" id="rev-open">Share your review</button>
+    </div>
+  </div>
+  <div class="rev-marquee" id="rev-marquee" hidden>
+    <ul class="rev-track" id="rev-track"></ul>
+  </div>
+  <div class="wrap">
+    <div class="rev-empty" id="rev-empty" hidden>
+      <span class="rev-empty-mark" aria-hidden="true">“</span>
+      <div>
+        <strong>No reviews on the site yet.</strong>
+        <p>Shipped a parcel or pre-ordered with us? Be the first to tell others how it went.</p>
+      </div>
+      <button class="btn btn-ghost" type="button" data-rev-open>Write the first review</button>
+    </div>
+  </div>
+</section>
+
+<dialog class="sheet rev-sheet" id="rev-sheet" aria-labelledby="rev-form-title">
+  <button class="sheet-close" type="button" id="rev-close" aria-label="Close">×</button>
+  <form class="rev-form" id="rev-form" novalidate>
+    <h3 id="rev-form-title">Share your review</h3>
+    <p class="rev-sub">Tell us how your shipping or pre-order went. We'll read it and add it to the site.</p>
+    <fieldset class="field full rev-stars">
+      <legend>Your rating</legend>
+      <div class="stars-input">
+        <input type="radio" name="rating" id="r5" value="5" checked><label for="r5" title="5 stars">★</label>
+        <input type="radio" name="rating" id="r4" value="4"><label for="r4" title="4 stars">★</label>
+        <input type="radio" name="rating" id="r3" value="3"><label for="r3" title="3 stars">★</label>
+        <input type="radio" name="rating" id="r2" value="2"><label for="r2" title="2 stars">★</label>
+        <input type="radio" name="rating" id="r1" value="1"><label for="r1" title="1 star">★</label>
+      </div>
+    </fieldset>
+    <div class="field"><label for="rv-name">Your name</label><input id="rv-name" autocomplete="name" placeholder="e.g. Ada O." required></div>
+    <div class="field"><label for="rv-city">Delivered to</label><input id="rv-city" placeholder="e.g. Toronto, Canada" required></div>
+    <div class="field full"><label for="rv-service">Service you used</label>
+      <select id="rv-service" required>
+        <option value="">Choose one</option>
+        <option>Air courier</option>
+        <option>Air cargo</option>
+        <option>Pre-order sea shipping</option>
+      </select>
+    </div>
+    <div class="field full"><label for="rv-text">Your review</label><textarea id="rv-text" maxlength="400" placeholder="What did you send or buy? How was the delivery?" required></textarea></div>
+    <label class="rev-consent full"><input type="checkbox" id="rv-ok"> AEFO can show my first name, city and review on this website.</label>
+    <p class="err full" id="rev-err" role="alert"></p>
+    <button class="btn btn-orange full" type="submit">Send review on WhatsApp</button>
+  </form>
+  <div class="rev-thanks" id="rev-thanks" hidden>
+    <h3>Thank you!</h3>
+    <p>WhatsApp should have opened with your review ready. Tap send there and we'll add it to the site once we've read it.</p>
+    <button class="btn btn-ghost" type="button" id="rev-done">Close</button>
+  </div>
+</dialog>
+
 <footer>
   <div class="wrap">
     <div>
@@ -403,6 +466,7 @@
 <a class="fab" href="https://wa.me/2349036614110" target="_blank" rel="noopener" aria-label="Chat with AEFO on WhatsApp"><svg><use href="#i-wa"/></svg></a>
 
 <script src="js/products.js"></script>
+<script src="js/reviews.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

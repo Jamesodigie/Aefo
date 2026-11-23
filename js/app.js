@@ -156,3 +156,67 @@ Phone: ${v("b-phone")}
 Item: ${v("b-item")}
 Deliver to: ${v("b-where") || "-"}`);
 });
+
+/* ================= CUSTOMER REVIEWS ================= */
+(function(){
+  const list = (window.REVIEWS || []).filter(r => r && r.name && r.text);
+  const marquee = document.getElementById("rev-marquee");
+  const track = document.getElementById("rev-track");
+  const empty = document.getElementById("rev-empty");
+  const esc = t => String(t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const initials = n => n.trim().split(/\s+/).slice(0,2).map(w => w[0]).join("").toUpperCase();
+  const card = (r, hidden) => {
+    const n = Math.max(1, Math.min(5, Number(r.rating) || 5));
+    const stars = "★".repeat(n) + `<span class="off">${"★".repeat(5-n)}</span>`;
+    const av = r.photo ? `<img src="${esc(r.photo)}" alt="">` : esc(initials(r.name));
+    return `<li class="rev-card"${hidden ? ' aria-hidden="true"' : ""}>
+      <div class="stars" aria-label="${n} out of 5 stars">${stars}</div>
+      <blockquote>“${esc(r.text)}”</blockquote>
+      <div class="who"><span class="av">${av}</span>
+        <div><b>${esc(r.name)}</b><span>${esc(r.city || "")}${r.date ? " · " + esc(r.date) : ""}</span></div>
+        ${r.service ? `<span class="svc">${esc(r.service)}</span>` : ""}
+      </div></li>`;
+  };
+  if (!list.length){ empty.hidden = false; }
+  else {
+    marquee.hidden = false;
+    if (list.length >= 3){
+      // repeat the set until it is wide enough, then duplicate it once for a seamless loop
+      let set = list.slice(); while (set.length < 6) set = set.concat(list);
+      track.innerHTML = set.map(r => card(r)).join("") + set.map(r => card(r, true)).join("");
+      track.style.setProperty("--rev-dur", (set.length * 7) + "s");
+      marquee.classList.add("moving");
+      marquee.addEventListener("touchstart", () => marquee.classList.toggle("paused"), {passive:true});
+    } else {
+      track.innerHTML = list.map(r => card(r)).join("");
+      marquee.style.overflowX = "auto";
+    }
+  }
+
+  const dlg = document.getElementById("rev-sheet");
+  const form = document.getElementById("rev-form");
+  const thanks = document.getElementById("rev-thanks");
+  const open = () => { form.hidden = false; thanks.hidden = true; dlg.showModal ? dlg.showModal() : dlg.setAttribute("open",""); };
+  document.getElementById("rev-open").onclick = open;
+  document.querySelectorAll("[data-rev-open]").forEach(b => b.onclick = open);
+  document.getElementById("rev-close").onclick = () => dlg.close();
+  document.getElementById("rev-done").onclick = () => dlg.close();
+  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const err = document.getElementById("rev-err"); err.textContent = "";
+    const v = id => form.querySelector("#" + id).value.trim();
+    if (!need(form, err, ["rv-name","rv-city","rv-service","rv-text"])) return;
+    if (!form.querySelector("#rv-ok").checked){ err.textContent = "Tick the box so we can show your review on the website."; return; }
+    const rating = form.querySelector('input[name="rating"]:checked').value;
+    openWA(`Hello AEFO, here is my review for your website.
+Rating: ${"★".repeat(rating)} (${rating}/5)
+Name: ${v("rv-name")}
+Delivered to: ${v("rv-city")}
+Service: ${v("rv-service")}
+Review: ${v("rv-text")}
+I agree AEFO can show my first name, city and review on the website.`);
+    form.hidden = true; thanks.hidden = false;
+  });
+})();
